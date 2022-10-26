@@ -1,31 +1,17 @@
 ﻿import UnityEngine
-import System.Collections
 
-class LogoShake (MonoBehaviour): 
+class LogoShake(MonoBehaviour):
 	
-	step as single = 0.001
-	directionReversed as bool = false
-
-	def Start ():
-		StartCoroutine("Shake")
+	public Speed = 0.03f
 	
-	def Update ():
-		pass
+	// cache for performance
+	private tr as Transform
 	
-	def Shake() as IEnumerator:
-		while true:
-			trsc = transform.localScale
-			
-			if trsc.x > 0.16:
-				directionReversed = true
-			elif trsc.x < 0.06:
-				directionReversed = false
-			
-			if directionReversed:
-				trsc.x -= step
-				trsc.y -= step
-			else:
-				trsc.x += step
-				trsc.y += step
-			transform.localScale = trsc
-			yield WaitForSeconds(0.03)
+	def Awake():
+		tr = transform
+		
+	def Update():
+		pingPong = Mathf.PingPong(Time.time * Speed, 0.1f)
+		
+		tr.localScale.x = 0.2 + pingPong
+		tr.localScale.y = 0.1779359 + pingPong
