@@ -4,34 +4,23 @@
 [RequireComponent(Rigidbody)]
 class Character(MonoBehaviour): 
 
-	public MovementSpeed = 6.0f
+	public MovementSpeed = 4.0f
+	public CrouchMovementSpeed = 2.0f
 	public AccelerationSpeed = 10.0f
-	public MaximumSpeed = 150.0f
-
 	public JumpForce = 400.0f
-
-	public MouseSensitivity = 3.0f
 	
-	private rotation = Vector2.zero
-
+	public MouseSensitivity = 3.0f // todo: move to settings
+	
 	private isGrounded as bool
-
-	private crouchRaycast as bool
-	private currentColliderCenterY as single
-	private defaultHeight = 2.0f
-	private crouchHeight = 1.2f
-	private crouchSpeed = 4.0f
-	private crouchColliderCenterY = 0.4f
-
-	private previousY as single
+	
 	private directionVector as Vector3
+	private jumpInput as bool
+	
+	private rotation as Vector2
+	private previousY as single
 	private movementForce as Vector3
 
-	private overlapMask as LayerMask = 19
-	private groundCheckerPosition as Vector3
-	private groundCheckerRadius = 0.4f
-	
-	private ceilCheckerPosition = Vector3(0.0f, 1.0f, 0.0f)
+	private overlapMask = 19
 	
 	private characterCollider as CapsuleCollider
 	private characterRigidbody as Rigidbody
@@ -50,21 +39,14 @@ class Character(MonoBehaviour):
 		HandleLookInput()
 		
 	def HandleMoveInput():
-		left = 0
-		right = 0
-		front = 0
-		back = 0
-		
-		if Input.GetKey(KeyCode.A):
-			left = 1
-		if Input.GetKey(KeyCode.D):
-			right = 1
-		if Input.GetKey(KeyCode.W):
-			front = 1
-		if Input.GetKey(KeyCode.S):
-			back = 1
+		// TERNARY CONDITIONAL OPERATOR IN BOO WTF
+		left = (1 if Input.GetKey(KeyCode.A) else 0)
+		right = (1 if Input.GetKey(KeyCode.D) else 0)
+		front = (1 if Input.GetKey(KeyCode.W) else 0)
+		back = (1 if Input.GetKey(KeyCode.S) else 0)
 		
 		directionVector = Vector3.ClampMagnitude(Vector3(-left + right, 0, front - back), 1.0f)
+		jumpInput = Input.GetKey(KeyCode.Space)
 		
 	def HandleLookInput():
 		rotation.y += Input.GetAxis("Mouse X") * MouseSensitivity
@@ -82,39 +64,45 @@ class Character(MonoBehaviour):
 		
 	def HandleGround():
 		groundCheckerPosition = Vector3(0, -0.65f + (1.2f - (characterCollider.height - 0.8f)), 0)
-		hasGround = Physics.CheckSphere(transform.TransformPoint(groundCheckerPosition), groundCheckerRadius, overlapMask)
+		hasGround = Physics.CheckSphere(transform.TransformPoint(groundCheckerPosition), 0.4f, overlapMask)
 		isGrounded = Mathf.Abs(characterRigidbody.velocity.y - previousY) < 0.1f and hasGround
 		previousY = characterRigidbody.velocity.y
 		
 	def HandleMovementForce():
-		characterRigidbody.velocity = Vector3.ClampMagnitude(characterRigidbody.velocity, MaximumSpeed)
+		characterRigidbody.velocity = Vector3.ClampMagnitude(characterRigidbody.velocity, 150.0f)
 		
 		movementDirection = transform.forward * directionVector.z
 		movementDirection += transform.right * directionVector.x
 
-		movementForce = Vector3.ClampMagnitude(movementDirection, 1.0f) * MovementSpeed
+		speed = MovementSpeed
+
+		if characterCollider.height < 2.0f:
+			speed = CrouchMovementSpeed
+
+		movementForce = Vector3.ClampMagnitude(movementDirection, 1.0f) * speed
 		
 	def HandleCrouch():
+		crouchSpeed = 4.0f
+		ceilCheckerPosition = Vector3(0.0f, 1.0f, 0.0f)
+		
 		if Input.GetKey(KeyCode.LeftControl):
-			if characterCollider.height > crouchHeight:
+			if characterCollider.height > 1.2f:
 				characterCollider.height -= crouchSpeed * Time.deltaTime
 				transform.position.y -= crouchSpeed * Time.deltaTime
-			if currentColliderCenterY < crouchColliderCenterY:
-				currentColliderCenterY += crouchSpeed * Time.deltaTime / 2
-		else:
-			if Physics.CheckSphere(transform.TransformPoint(ceilCheckerPosition), characterCollider.radius * 0.95f, overlapMask):
-				if characterCollider.height < defaultHeight:
-					characterCollider.height += crouchSpeed * Time.deltaTime
-				if currentColliderCenterY > 0:
-					currentColliderCenterY -= crouchSpeed * Time.deltaTime / 2
+			if characterCollider.center.y < 0.4f:
+				characterCollider.center.y += crouchSpeed * Time.deltaTime / 2
+		elif not Physics.CheckSphere(transform.TransformPoint(ceilCheckerPosition), characterCollider.radius * 0.95f, overlapMask):
+			if characterCollider.height < 2.0f:
+				characterCollider.height += crouchSpeed * Time.deltaTime
+				transform.position.y += crouchSpeed * Time.deltaTime
+			if characterCollider.center.y > 0:
+				characterCollider.center.y -= crouchSpeed * Time.deltaTime / 2
 				
-		characterCollider.height = Mathf.Clamp(characterCollider.height, crouchHeight, defaultHeight)
-
-		currentColliderCenterY = Mathf.Clamp(currentColliderCenterY, 0, crouchColliderCenterY)
-		characterCollider.center.y = currentColliderCenterY
+		characterCollider.height = Mathf.Clamp(characterCollider.height, 1.2f, 2.0f)
+		characterCollider.center.y = Mathf.Clamp(characterCollider.center.y, 0, 0.4f)
 		
 	def HandleJump():
-		if Input.GetKeyDown(KeyCode.Space) and isGrounded:
+		if jumpInput and isGrounded:
 			characterRigidbody.AddForce(JumpForce * characterRigidbody.mass * Vector3.up)
 			
 	def HandleMovement():
