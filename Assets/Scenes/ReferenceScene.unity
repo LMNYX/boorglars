@@ -224,7 +224,7 @@ GameObject:
   - 114: {fileID: 605278931}
   - 136: {fileID: 605278933}
   - 54: {fileID: 605278932}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -256,9 +256,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bddd7456934f6d448963a496aec5792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 6
+  MovementSpeed: 4
+  CrouchMovementSpeed: 2
   AccelerationSpeed: 10
-  MaximumSpeed: 150
   JumpForce: 400
   MouseSensitivity: 3
 --- !u!54 &605278932
@@ -362,7 +362,7 @@ GameObject:
   - 4: {fileID: 1120316803}
   - 33: {fileID: 1120316805}
   - 23: {fileID: 1120316804}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,7 +420,7 @@ GameObject:
   - 92: {fileID: 1247099979}
   - 124: {fileID: 1247099978}
   - 81: {fileID: 1247099977}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
