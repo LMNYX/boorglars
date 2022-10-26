@@ -3,6 +3,7 @@ import UnityEngine
 
 class GUICalculator(EditorWindow):
 	
+	// how much needs to squish default GUITexture for it to become 1:1 square
 	static referenceWidth = 0.562
 	static referenceHeight = 1.0
 	
