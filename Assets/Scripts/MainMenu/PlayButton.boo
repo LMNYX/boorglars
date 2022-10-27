@@ -3,4 +3,4 @@
 class PlayButton(Button):
 	
 	override def OnPressed():
-		Debug.Log("Specific logic to PlayButton")
+		Application.LoadLevel("ReferenceScene")
