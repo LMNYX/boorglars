@@ -2,6 +2,8 @@
 
 class Wanderer (MonoBehaviour): 
 
+	public IsWandering as bool
+
 	goal as Vector3
 	
 	[Range(0,30)] public delayBetweenNavigations as single
@@ -19,7 +21,7 @@ class Wanderer (MonoBehaviour):
 	def Update ():
 		if(Time.time < PauseTime):
 			return
-		if(agent.remainingDistance <= 0.1):
+		if(agent.remainingDistance <= 0.1 and IsWandering):
 			PauseTime = Time.time + delayBetweenNavigations
 			SetDestination(RandomNavMeshPosition(transform.position, radius, -1))
 	
