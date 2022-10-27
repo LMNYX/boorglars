@@ -30,10 +30,7 @@ class Character(MonoBehaviour):
 		characterCollider = GetComponent[of CapsuleCollider]()
 		characterRigidbody = GetComponent[of Rigidbody]()
 		characterCamera = Camera.main
-
-	def Start():
-		pass
-	
+		
 	def Update():
 		HandleMoveInput()
 		HandleLookInput()
@@ -78,12 +75,12 @@ class Character(MonoBehaviour):
 
 		if characterCollider.height < 2.0f:
 			speed = CrouchMovementSpeed
-
+			
 		movementForce = Vector3.ClampMagnitude(movementDirection, 1.0f) * speed
 		
 	def HandleCrouch():
 		crouchSpeed = 4.0f
-		ceilCheckerPosition = Vector3(0.0f, 1.0f, 0.0f)
+		ceilCheckerPosition = Vector3(0.0f, 0.7f, 0.0f)
 		
 		if Input.GetKey(KeyCode.LeftControl):
 			if characterCollider.height > 1.2f:
