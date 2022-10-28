@@ -16,7 +16,7 @@ class Wanderer(MonoBehaviour):
 
 	def Start():
 		agent = GetComponent[of NavMeshAgent]()
-		PauseTime = delayBeforeFirstNavigation
+		PauseTime = Time.time + delayBeforeFirstNavigation
 
 	def Update():
 		if Time.time < PauseTime:
