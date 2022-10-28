@@ -494,9 +494,9 @@ class INIParser:
 	// Getters for various types
 	public def ReadValue(SectionName as string, Key as string, DefaultValue as bool) as bool:
 		StringValue = ReadValue(SectionName, Key, DefaultValue.ToString(CultureInfo.InvariantCulture))
-		Value as int
-		if int.TryParse(StringValue, Value):
-			return Value != 0
+		Value as bool
+		if bool.TryParse(StringValue, Value):
+			return Value
 		return DefaultValue
 
 	public def ReadValue(SectionName as string, Key as string, DefaultValue as int) as int:
