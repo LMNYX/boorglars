@@ -7,7 +7,7 @@ import System.IO
 import System.Text
 import UnityEngine
 
-class INIParser: 
+class INIParser:
 
 	def constructor():
 		pass
