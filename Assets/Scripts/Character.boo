@@ -9,7 +9,7 @@ class Character(MonoBehaviour):
 	public AccelerationSpeed = 10.0f
 	public JumpForce = 400.0f
 
-	public MouseSensitivity = 3.0f // todo: move to settings
+	private mouseSensitivity as single
 
 	private isGrounded as bool
 
@@ -30,6 +30,7 @@ class Character(MonoBehaviour):
 		characterCollider = GetComponent[of CapsuleCollider]()
 		characterRigidbody = GetComponent[of Rigidbody]()
 		characterCamera = Camera.main
+		mouseSensitivity = Settings.MouseSensitivity
 
 	def Update():
 		HandleMoveInput()
@@ -46,8 +47,8 @@ class Character(MonoBehaviour):
 		jumpInput = Input.GetKey(KeyCode.Space)
 
 	def HandleLookInput():
-		rotation.y += Input.GetAxis("Mouse X") * MouseSensitivity
-		rotation.x += -Input.GetAxis("Mouse Y") * MouseSensitivity
+		rotation.y += Input.GetAxis("Mouse X") * mouseSensitivity
+		rotation.x += -Input.GetAxis("Mouse Y") * mouseSensitivity
 		rotation.x = Mathf.Clamp(rotation.x, -90f, 90f)
 		transform.eulerAngles = Vector2(0, rotation.y)
 		characterCamera.transform.localRotation = Quaternion.Euler(rotation.x, 0, 0)
