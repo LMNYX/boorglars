@@ -31,7 +31,11 @@ Material:
       data:
         first:
           name: _Outline
-        second: .00803571381
+        second: .00428571366
+      data:
+        first:
+          name: _Thickness
+        second: 20
     m_Colors:
       data:
         first:
