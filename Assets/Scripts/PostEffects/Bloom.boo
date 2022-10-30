@@ -186,9 +186,6 @@ class Bloom(PostEffectBase):
 				Vignette(0.975f, rtFlares4, rtFlares4)
 				BlendFlares(rtFlares4, secondQuarterRezColor)
 			else:
-				//Vignette(0.975f, rtFlares4, rtFlares4)
-				//DrawBorder(rtFlares4, screenBlend, 8)
-
 				flareXRot = 1.0f * Mathf.Cos(flareRotation)
 				flareyRot = 1.0f * Mathf.Sin(flareRotation)
 
@@ -202,19 +199,23 @@ class Bloom(PostEffectBase):
 				// "pre and cut"
 				quarterRezColor.DiscardContents()
 				Graphics.Blit(rtFlares4, quarterRezColor, blurAndFlaresMaterial, 2)
+
 				// "post"
 				rtFlares4.DiscardContents()
 				Graphics.Blit(quarterRezColor, rtFlares4, blurAndFlaresMaterial, 3)
 
 				blurAndFlaresMaterial.SetVector("_Offsets", Vector4(flareXRot * stretchWidth, flareyRot * stretchWidth, 0.0, 0.0))
+
 				// stretch 1st
 				blurAndFlaresMaterial.SetFloat("_StretchWidth", hollywoodStretchWidth)
 				quarterRezColor.DiscardContents()
 				Graphics.Blit(rtFlares4, quarterRezColor, blurAndFlaresMaterial, 1)
+
 				// stretch 2nd
 				blurAndFlaresMaterial.SetFloat("_StretchWidth", hollywoodStretchWidth * 2.0f)
 				rtFlares4.DiscardContents()
 				Graphics.Blit(quarterRezColor, rtFlares4, blurAndFlaresMaterial, 1)
+
 				// stretch 3rd
 				blurAndFlaresMaterial.SetFloat("_StretchWidth", hollywoodStretchWidth * 4.0f)
 				quarterRezColor.DiscardContents()
@@ -243,8 +244,6 @@ class Bloom(PostEffectBase):
 			RenderTexture.ReleaseTemporary(rtFlares4)
 
 		blendPass = realBlendMode
-		//if Mathf.Abs(chromaticBloom) < Mathf.Epsilon:
-		//	blendPass += 4;
 
 		screenBlend.SetFloat("_Intensity", bloomIntensity)
 		screenBlend.SetTexture("_ColorBuffer", source)
