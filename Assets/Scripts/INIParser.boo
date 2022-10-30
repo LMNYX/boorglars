@@ -304,7 +304,7 @@ class INIParser:
 				sr.Close()
 				sr = null
 			ensure:
-				// Cleanup: close string reader                  
+				// Cleanup: close string reader
 				if sr != null:
 					sr.Close()
 				sr = null
