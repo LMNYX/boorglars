@@ -1,5 +1,6 @@
 ﻿import UnityEngine
 
+[RequireComponent(NavMeshAgent)]
 class Wanderer(MonoBehaviour):
 
 	public IsWandering as bool
